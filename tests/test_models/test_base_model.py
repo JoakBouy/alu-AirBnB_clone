@@ -268,6 +268,14 @@ class TestBaseModel(unittest.TestCase):
         }
         self.assertDictEqual(test_dict, b.to_dict())
 
+    def test_to_dict_with_args(self):
+        """
+        Checks that TypeError is returned when argument is passed to to_dict()
+        """
+        b = BaseModel()
+        with self.assertRaises(TypeError):
+            b.to_dict(None)
+
 
 
 
