@@ -71,5 +71,12 @@ class TestBaseModel(unittest.TestCase):
         sleep(0.02)
         self.assertLess(b1.created_at, b2.created_at)
 
+    def test_args_unused(self):
+        """
+        Checks that the attribute 'args' is not used.
+        """
+        b = BaseModel(None)
+        self.assertNotIn(None, b.__dict__.values())
+
 if __name__ == "__main__":
     unittest.main()
