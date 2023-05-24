@@ -123,6 +123,26 @@ class TestBaseModel(unittest.TestCase):
         b = BaseModel()
         self.assertEqual(b.to_dict()["updated_at"], b.updated_at.isoformat())
 
+    def test_if_to_dict_returns_the_accurate_number_of_keys(self):
+        """
+        Checks that to_dict() returns the expected number of keys/values
+        """
+        b = BaseModel()
+        partial_expectation = {k: v for k, v in b.__dict__.items()
+                               if not k.startswith("_")}
+        self.assertEqual(len(b.to_dict()), len(partial_expectation) + 1)
+
+    def test_when_kwargs_passed_is_empty(self):
+        """
+        Checks that id, created_at and updated_at are automatically
+        generated if they're not in kwargs
+        """
+        my_dict = {}
+        b = BaseModel(**my_dict)
+        self.assertTrue(type(b.id) is str)
+        self.assertTrue(type(b.created_at) is datetime)
+        self.assertTrue(type(b.updated_at) is datetime)
+
 
 
 if __name__ == "__main__":
