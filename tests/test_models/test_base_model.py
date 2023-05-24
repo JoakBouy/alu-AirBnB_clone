@@ -78,5 +78,52 @@ class TestBaseModel(unittest.TestCase):
         b = BaseModel(None)
         self.assertNotIn(None, b.__dict__.values())
 
+    def test_that_created_at_equals_updated_at_initially(self):
+        """
+        Checks that create_at == updated_at at initialization
+        """
+        b = BaseModel()
+        self.assertEqual(b.created_at, b.updated_at)
+
+
+    def test_that_save_func_update_update_at_attr(self):
+        """
+        Checks that save() method updates the updated_at attribute
+        """
+        b = BaseModel()
+        b.save()
+        self.assertNotEqual(b.created_at, b.updated_at)
+        self.assertGreater(b.updated_at.microsecond,
+                           b.created_at.microsecond)
+    def test_if_to_dict_returns_dict(self):
+        """
+        Checks if BaseModel.to_dict() returns a dict object
+        """
+        b = BaseModel()
+        self.assertTrue(type(b.to_dict()) is dict)
+
+    def test_if_to_dict_returns_class_dunder_method(self):
+        """
+        Checks if BaseModel.to_dict() contains __class__
+        """
+        b = BaseModel()
+        self.assertTrue("__class__" in b.to_dict())
+
+    def test_that_created_at_returned_by_to_dict_is_an_iso_string(self):
+        """
+        Checks that created_at is stored as a str obj in ISO format
+        """
+        b = BaseModel()
+        self.assertEqual(b.to_dict()["created_at"], b.created_at.isoformat())
+
+    def test_that_updated_at_returned_by_to_dict_is_an_iso_string(self):
+        """
+        Checks that updated_at is stored as a str obj in ISO format
+        """
+        b = BaseModel()
+        self.assertEqual(b.to_dict()["updated_at"], b.updated_at.isoformat())
+
+
+
 if __name__ == "__main__":
     unittest.main()
