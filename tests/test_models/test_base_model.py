@@ -231,6 +231,15 @@ class TestBaseModel(unittest.TestCase):
         with open("file.json", encoding="utf-8") as f:
             self.assertIn(bid, f.read())
 
+    def test_that_to_dict_contains_correct_keys(self):
+        """
+        Checks whether to_dict() returns the expected key
+        """
+        b_dict = BaseModel().to_dict()
+        attrs = ("id", "created_at", "updated_at", "__class__")
+        for attr in attrs:
+            self.assertIn(attr, b_dict)
+
 
 
 if __name__ == "__main__":
