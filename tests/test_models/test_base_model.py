@@ -102,6 +102,13 @@ class TestBaseModel(unittest.TestCase):
         b = BaseModel()
         self.assertTrue(type(b.to_dict()) is dict)
 
+    def test_if_to_dict_returns_class_dunder_method(self):
+        """
+        Checks if BaseModel.to_dict() contains __class__
+        """
+        b = BaseModel()
+        self.assertTrue("__class__" in b.to_dict())
+
 
 if __name__ == "__main__":
     unittest.main()
