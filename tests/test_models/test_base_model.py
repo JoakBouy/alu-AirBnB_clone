@@ -252,6 +252,22 @@ class TestBaseModel(unittest.TestCase):
         for attr in attrs:
             self.assertIn(attr, b.to_dict())
 
+    def test_to_dict_output(self):
+        """
+        Checks the output returned by to_dict()
+        """
+        b = BaseModel()
+        dt = datetime.now()
+        b.id = "12345"
+        b.created_at = b.updated_at = dt
+        test_dict = {
+            'id': "12345",
+            'created_at': dt.isoformat(),
+            'updated_at': dt.isoformat(),
+            '__class__': 'BaseModel'
+        }
+        self.assertDictEqual(test_dict, b.to_dict())
+
 
 
 
