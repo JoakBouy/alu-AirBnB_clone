@@ -85,5 +85,18 @@ class TestBaseModel(unittest.TestCase):
         b = BaseModel()
         self.assertEqual(b.created_at, b.updated_at)
 
+
+    def test_that_save_func_update_update_at_attr(self):
+        """
+        Checks that save() method updates the updated_at attribute
+        """
+        b = BaseModel()
+        b.save()
+        self.assertNotEqual(b.created_at, b.updated_at)
+        self.assertGreater(b.updated_at.microsecond,
+                           b.created_at.microsecond)
+
+
+
 if __name__ == "__main__":
     unittest.main()
