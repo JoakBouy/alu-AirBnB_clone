@@ -116,6 +116,13 @@ class TestBaseModel(unittest.TestCase):
         b = BaseModel()
         self.assertEqual(b.to_dict()["created_at"], b.created_at.isoformat())
 
+    def test_that_updated_at_returned_by_to_dict_is_an_iso_string(self):
+        """
+        Checks that updated_at is stored as a str obj in ISO format
+        """
+        b = BaseModel()
+        self.assertEqual(b.to_dict()["updated_at"], b.updated_at.isoformat())
+
 
 
 if __name__ == "__main__":
