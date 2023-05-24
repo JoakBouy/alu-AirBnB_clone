@@ -1,55 +1,42 @@
+#!/usr/bin/python3
 import json
-import os
-import unittest
-from io import StringIO
-from unittest.mock import patch
-
-from file_storage import FileStorage
+from os import path
 
 
-class TestFileStorage(unittest.TestCase):
-    def setUp(self):
-        FileStorage.__objects = {}
-        self.file_storage = FileStorage()
+class FileStorage:
+    """ file storage class"""
 
-    def test_all(self):
-        self.assertEqual(self.file_storage.all(), {})
+    __file_path = "file.json"
+    __objects = {}
 
-        obj1 = {"id": 1, "name": "object 1"}
-        self.file_storage.new(obj1)
-        self.assertEqual(self.file_storage.all(), {"object.1": obj1})
+    def all(self):
+        """ returns : dictionary """
+        return self.__objects
 
-        obj2 = {"id": 2, "name": "object 2"}
-        self.file_storage.new(obj2)
-        self.assertEqual(self.file_storage.all(), {"object.1": obj1, "object.2": obj2})
+    def new(self, obj):
+        """ set object with key """
+        self.__objects[obj.__class__.__name__ + '.' + obj.id] = obj
 
-    def test_new(self):
-        obj = {"id": 1, "name": "object 1"}
-        self.file_storage.new(obj)
-        self.assertEqual(self.file_storage.all(), {"object.1": obj})
+    def save(self):
+        """ serializes to json file """
+        temp = {}
+        for key in self.__objects:
+            temp[key] = self.__objects[key].to_dict()
+        with open(self.__file_path, "w+", encoding='utf-8') as out_file:
+            json.dump(temp, out_file)
 
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_save(self, mock_stdout):
-        obj = {"id": 1, "name": "object 1"}
-        self.file_storage.new(obj)
-
-        self.file_storage.save()
-        with open("file.json", 'r') as file:
-            self.assertEqual(json.load(file), {"object.1": obj})
-
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_reload(self, mock_stdout):
-        obj = {"id": 1, "name": "object 1"}
-        self.file_storage.new(obj)
-
-        self.file_storage.save()
-
-        self.file_storage = FileStorage()
-        self.assertEqual(self.file_storage.all(), {})
-        self.file_storage.reload()
-        self.assertEqual(self.file_storage.all(), {"object.1": obj})
-
-        os.remove("file.json")
-
-if __name__ == '__main__':
-    unittest.main()
+    def reload(self):
+        """ deserializes json to file """
+        from models.base_model import BaseModel
+        from models.user import User
+        from models.city import City
+        from models.state import State
+        from models.place import Place
+        from models.review import Review
+        from models.amenity import Amenity
+        if path.exists(self.__file_path):
+            with open(self.__file_path, "r", encoding='utf-8') as in_file:
+                dataset = json.load(in_file)
+                for data in dataset.values():
+                    name_of_class = data['__class__']
+                    self.new(eval(name_of_class + "(**" + str(data) + ")"))
