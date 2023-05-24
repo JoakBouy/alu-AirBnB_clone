@@ -143,6 +143,70 @@ class TestBaseModel(unittest.TestCase):
         self.assertTrue(type(b.created_at) is datetime)
         self.assertTrue(type(b.updated_at) is datetime)
 
+    def test_when_kwargs_passed_is_not_empty(self):
+        """
+        Checks that id, created_at and updated_at are created from kwargs
+        """
+        my_dict = {"id": uuid4(), "created_at": datetime.utcnow().isoformat(),
+                   "updated_at": datetime.utcnow().isoformat()}
+        b = BaseModel(**my_dict)
+        self.assertEqual(b.id, my_dict["id"])
+        self.assertEqual(b.created_at,
+                         datetime.strptime(my_dict["created_at"],
+                                           "%Y-%m-%dT%H:%M:%S.%f"))
+        self.assertEqual(b.updated_at,
+                         datetime.strptime(my_dict["updated_at"],
+                                           "%Y-%m-%dT%H:%M:%S.%f"))
+
+    def test_when_args_and_kwargs_are_passed(self):
+        """
+        When args and kwargs are passed, BaseModel should ignore args
+        """
+        dt = datetime.now()
+        dt_iso = dt.isoformat()
+        b = BaseModel("1234", id="234", created_at=dt_iso, name="Firdaus")
+        self.assertEqual(b.id, "234")
+        self.assertEqual(b.created_at, dt)
+        self.assertEqual(b.name, "Firdaus")
+
+    def test_when_kwargs_passed_is_more_than_default(self):
+        """
+        Checks BaseModel does not break when kwargs contains more than
+        the default attributes
+        """
+        my_dict = {"id": uuid4(), "created_at": datetime.utcnow().isoformat(),
+                   "updated_at": datetime.utcnow().isoformat(),
+                   "name": "Firdaus"}
+        b = BaseModel(**my_dict)
+        self.assertTrue(hasattr(b, "name"))
+
+    def test_new_method_not_called_when_dict_obj_is_passed_to_BaseModel(self):
+        """
+        Test that storage.new() is not called when a BaseModel obj is
+        created from a dict object
+        """
+        my_dict = {"id": uuid4(), "created_at": datetime.utcnow().isoformat(),
+                   "updated_at": datetime.utcnow().isoformat(),
+                   "name": "Firdaus"}
+        b = BaseModel(**my_dict)
+        self.assertTrue(b not in models.storage.all().values(),
+                        "{}".format(models.storage.all().values()))
+        del b
+
+        b = BaseModel()
+        self.assertTrue(b in models.storage.all().values())
+
+    def test_that_save_method_updates_updated_at_attr(self):
+        """
+        Checks that save() method updates 'updated_at' attribute
+        """
+        b = BaseModel()
+        sleep(0.02)
+        temp_update = b.updated_at
+        b.save()
+        self.assertLess(temp_update, b.updated_at)
+
+
 
 
 if __name__ == "__main__":
