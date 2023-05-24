@@ -240,6 +240,19 @@ class TestBaseModel(unittest.TestCase):
         for attr in attrs:
             self.assertIn(attr, b_dict)
 
+    def test_to_dict_contains_added_attributes(self):
+        """
+        Checks that new attributes are also returned by to_dict()
+        """
+        b = BaseModel()
+        attrs = ["id", "created_at", "updated_at", "__class__"]
+        b.name = "Firdaus"
+        b.email = "firduas@gmail.com"
+        attrs.extend(["name", "email"])
+        for attr in attrs:
+            self.assertIn(attr, b.to_dict())
+
+
 
 
 if __name__ == "__main__":
