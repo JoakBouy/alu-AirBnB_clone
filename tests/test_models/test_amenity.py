@@ -1,0 +1,17 @@
+#!/usr/bin/python3
+"""Test suite for Amenity class of the models.amenity module"""
+import unittest
+
+from models.base_model import BaseModel
+from models.amenity import Amenity
+
+
+class TestAmenity(unittest.TestCase):
+    """Test cases for the Amenity class"""
+
+    def setUp(self):
+        self.amenity = Amenity()
+
+    def test_amenity_is_a_subclass_of_basemodel(self):
+        self.assertTrue(issubclass(type(self.amenity), BaseModel))
+
