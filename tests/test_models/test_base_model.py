@@ -78,5 +78,12 @@ class TestBaseModel(unittest.TestCase):
         b = BaseModel(None)
         self.assertNotIn(None, b.__dict__.values())
 
+    def test_that_created_at_equals_updated_at_initially(self):
+        """
+        Checks that create_at == updated_at at initialization
+        """
+        b = BaseModel()
+        self.assertEqual(b.created_at, b.updated_at)
+
 if __name__ == "__main__":
     unittest.main()
