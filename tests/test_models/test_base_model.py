@@ -109,6 +109,14 @@ class TestBaseModel(unittest.TestCase):
         b = BaseModel()
         self.assertTrue("__class__" in b.to_dict())
 
+    def test_that_created_at_returned_by_to_dict_is_an_iso_string(self):
+        """
+        Checks that created_at is stored as a str obj in ISO format
+        """
+        b = BaseModel()
+        self.assertEqual(b.to_dict()["created_at"], b.created_at.isoformat())
+
+
 
 if __name__ == "__main__":
     unittest.main()
