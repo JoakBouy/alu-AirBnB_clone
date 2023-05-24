@@ -221,6 +221,15 @@ class TestBaseModel(unittest.TestCase):
         b.save()
         self.assertLess(temp1_update, b.updated_at)
 
+    def test_save_update_file(self):
+        """
+        Tests if file is updated when the 'save' is called
+        """
+        b = BaseModel()
+        b.save()
+        bid = "BaseModel.{}".format(b.id)
+        with open("file.json", encoding="utf-8") as f:
+            self.assertIn(bid, f.read())
 
 
 
