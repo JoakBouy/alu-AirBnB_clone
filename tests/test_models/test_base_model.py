@@ -95,7 +95,12 @@ class TestBaseModel(unittest.TestCase):
         self.assertNotEqual(b.created_at, b.updated_at)
         self.assertGreater(b.updated_at.microsecond,
                            b.created_at.microsecond)
-
+    def test_if_to_dict_returns_dict(self):
+        """
+        Checks if BaseModel.to_dict() returns a dict object
+        """
+        b = BaseModel()
+        self.assertTrue(type(b.to_dict()) is dict)
 
 
 if __name__ == "__main__":
