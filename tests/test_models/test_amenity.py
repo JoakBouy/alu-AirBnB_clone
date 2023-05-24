@@ -18,3 +18,7 @@ class TestAmenity(unittest.TestCase):
     def test_attr_is_a_class_attr(self):
         self.assertTrue(hasattr(self.amenity, "name"))
 
+    def test_class_attr(self):
+        self.assertIs(type(self.amenity.name), str)
+        self.assertFalse(bool(getattr(self.amenity, "name")))
+
