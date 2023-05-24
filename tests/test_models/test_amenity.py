@@ -15,3 +15,6 @@ class TestAmenity(unittest.TestCase):
     def test_amenity_is_a_subclass_of_basemodel(self):
         self.assertTrue(issubclass(type(self.amenity), BaseModel))
 
+    def test_attr_is_a_class_attr(self):
+        self.assertTrue(hasattr(self.amenity, "name"))
+
