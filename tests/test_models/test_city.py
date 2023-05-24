@@ -15,3 +15,8 @@ class TestCity(unittest.TestCase):
 
     def test_city_is_a_subclass_of_basemodel(self):
         self.assertTrue(issubclass(type(self.city), BaseModel))
+
+    def test_attrs_are_class_attrs(self):
+        for attr in self.attr_list:
+            self.assertIs(type(getattr(self.city, attr)), str)
+            self.assertFalse(bool(getattr(self.city, attr)))
