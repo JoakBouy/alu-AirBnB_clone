@@ -77,17 +77,14 @@ class HBNBCommand(cmd.Cmd):
                     line = str(line[1]) + " " + str(line[0]) + " " + str(line[2])
 
                 elif len(line) == 4:
-                    line[2] = line[2].replace('"', '')
-                    print(line)
-                    line[3] = line[3].replace('"', '')
-                    print(line)
-                    line = str(line[1]) + " " + str(line[0]) + " " + str(line[2]) + " " + str(line[3])
-                    print(line)
+                line[2] = line[2].replace('"', '')
+                line[3] = line[3].replace('"', '')
+                line = str(line[1]) + " " + str(line[0]) + " " + str(line[2]) + " " + str(line[3])
+        else:
+            pass
 
 
 
-            else:
-                pass
 
 
         return cmd.Cmd.precmd(self, line)
